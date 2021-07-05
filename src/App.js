@@ -24,7 +24,14 @@ function App() {
   }
 
   const updateAnotherServerData = async () => {
-    const url = '/api/data/something-else';
+    const url = '/api/something-else/update';
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+  }
+
+  const getAnotherServerData = async () => {
+    const url = '/api/something-else';
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);
@@ -44,12 +51,12 @@ function App() {
           <h3>ETag</h3>
           <p>
             The above happens because ETag is used. <br/>
-            <ol>
-              <li>At the initial request, the server responds with ETag in the response header.</li>
-              <li>When making the subsequent requests, the browser automatically adds "If-None-Match: --the original etag hash here --" to the request header. <strong>This can be added manually in the request (e.g. test with postman)</strong></li>
-              <li>Server receives the request and checks if the data has changed or not based on the etag hash sent from the browser.</li>
-            </ol>
           </p>
+          <ol>
+            <li>At the initial request, the server responds with ETag in the response header.</li>
+            <li>When making the subsequent requests, the browser automatically adds "If-None-Match: --the original etag hash here --" to the request header. <strong>This can be added manually in the request (e.g. test with postman)</strong></li>
+            <li>Server receives the request and checks if the data has changed or not based on the etag hash sent from the browser.</li>
+          </ol>
           <h3>fetch</h3>
           <button className="button" onClick={() => handleOnClickWithFetch(false)}>Get Data with fetch</button>
           <button className="button" onClick={() => handleOnClickWithFetch(true)}>Get Data with fetch with cache busting</button>
@@ -66,6 +73,9 @@ function App() {
           <p>Click below to call another endpoint to update another data in the server. <br/>
             This will not affect the first data in the server (because ETag hash is the specific to the each response data), so it does not affect the browser caching in the first data.</p>
           <button className="button" onClick={updateAnotherServerData}>Update another data in the server</button>
+          <h3>Cache-Control: max-age set in the server</h3>
+          <p>With this, after intial call, subsequent responses will be very fast as browser cache is used automatically, but the cached data can go stale.</p>
+          <button className="button" onClick={getAnotherServerData}>Get the another data in the server</button>
         </div>
       </div>
     </div>
