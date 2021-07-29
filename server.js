@@ -17,6 +17,7 @@ app.get('/api/data', (req, res, next) => {
 });
 
 app.get('/api/data/update', (req, res, next) => {
+  // myData is changed below. So, the etag of the data changes here.
   myData = Math.random();
   console.log('myData: ', myData);
   res.json({ success: 'true' });
